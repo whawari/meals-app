@@ -5,6 +5,8 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleFavorite } from "../store/actions/meals";
 
 import COLORS from "../constants/COLORS";
 
@@ -31,6 +33,15 @@ const defaultStackScreenOptions = {
 };
 
 const MealsStackNavigator = () => {
+  const dispatch = useDispatch();
+  const isCurrentMealFavorite = useSelector(
+    (state) => state.meals.favoriteMeals
+  );
+
+  const toggleFavoriteMealHandler = (mealId) => {
+    dispatch(toggleFavorite(mealId));
+  };
+
   return (
     <Stack.Navigator screenOptions={defaultStackScreenOptions}>
       <Stack.Screen
@@ -74,9 +85,15 @@ const MealsStackNavigator = () => {
             <HeaderButtons HeaderButtonComponent={HeaderRightButton}>
               <Item
                 title="Favorite"
-                iconName="ios-star"
+                iconName={
+                  isCurrentMealFavorite.some(
+                    (meal) => meal.id === route.params.meal.id
+                  )
+                    ? "ios-star"
+                    : "ios-star-outline"
+                }
                 onPress={() => {
-                  console.log("pressed");
+                  toggleFavoriteMealHandler(route.params.meal.id);
                 }}
               />
             </HeaderButtons>
@@ -88,6 +105,15 @@ const MealsStackNavigator = () => {
 };
 
 const FavoritesStackNavigator = () => {
+  const dispatch = useDispatch();
+  const isCurrentMealFavorite = useSelector(
+    (state) => state.meals.favoriteMeals
+  );
+
+  const toggleFavoriteMealHandler = (mealId) => {
+    dispatch(toggleFavorite(mealId));
+  };
+
   return (
     <Stack.Navigator screenOptions={defaultStackScreenOptions}>
       <Stack.Screen
@@ -120,9 +146,15 @@ const FavoritesStackNavigator = () => {
             <HeaderButtons HeaderButtonComponent={HeaderRightButton}>
               <Item
                 title="Favorite"
-                iconName="ios-star"
+                iconName={
+                  isCurrentMealFavorite.some(
+                    (meal) => meal.id === route.params.meal.id
+                  )
+                    ? "ios-star"
+                    : "ios-star-outline"
+                }
                 onPress={() => {
-                  console.log("pressed");
+                  toggleFavoriteMealHandler(route.params.meal.id);
                 }}
               />
             </HeaderButtons>

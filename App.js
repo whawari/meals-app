@@ -4,8 +4,18 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { NavigationContainer } from "@react-navigation/native";
 import { OverflowMenuProvider } from "react-navigation-header-buttons";
+import { createStore, combineReducers } from "redux";
+import { Provider } from "react-redux";
+
+import mealsReducer from "./store/reducers/meals";
 
 import MainNavigator from "./navigation/MainNavigator";
+
+const rootReducer = combineReducers({
+  meals: mealsReducer,
+});
+
+const store = createStore(rootReducer);
 
 const fetchFonts = () => {
   Font.loadAsync({
@@ -32,10 +42,12 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <OverflowMenuProvider>
-        <MainNavigator />
-      </OverflowMenuProvider>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <OverflowMenuProvider>
+          <MainNavigator />
+        </OverflowMenuProvider>
+      </NavigationContainer>
+    </Provider>
   );
 }
